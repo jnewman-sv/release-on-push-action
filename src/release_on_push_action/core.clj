@@ -41,6 +41,7 @@
    :input/tag-prefix    (System/getenv "INPUT_TAG_PREFIX") ;defaults to "v", see default in action.yml
    :input/release-name  (System/getenv "INPUT_RELEASE_NAME") ;defaults to "<RELEASE_TAG>", see default in action.yml
    :input/use-github-release-notes (Boolean/parseBoolean (System/getenv "INPUT_USE_GITHUB_RELEASE_NOTES"))
+   :input/draft (Boolean/parseBoolean (System/getenv "INPUT_IS_DRAFT"))
    :bump-version-scheme (assert-valid-bump-version-scheme
                          (try
                            (getenv-or-throw "INPUT_BUMP_VERSION_SCHEME")
@@ -127,7 +128,7 @@
                                  (str/replace "<RELEASE_VERSION>" next-version)
                                  (str/replace "<RELEASE_TAG>" tag-name))
      :body                   body
-     :draft                  false
+     :draft                  (:input/is-draft context)
      :prerelease             false
      :generate_release_notes (:input/use-github-release-notes context)}))
 
